@@ -1,10 +1,10 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const bcrypt = require('bcryptjs'); //<<<<<<<<<< we get the hash by using(importing) the bcryptjs library <<<<< yarn add bcryptjs
 
 const db = require('./database/dbConfig.js'); //db config options - connections
 const Users = require('./users/users-model.js'); //interacting with our db
+const protected = require('./auth/protected-middleware.js'); //create new folder for middleware function
 
 const server = express();
 
@@ -61,8 +61,8 @@ Users.findBy({ username })
     });
 });
 
-// protect this route, users must provide valid credentials to see it
-server.get('/api/users', (req, res) => {
+// protect this route, users must provide valid credentials to see the list of users
+server.get('/api/users', protected, (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
@@ -70,5 +70,8 @@ server.get('/api/users', (req, res) => {
     .catch(err => res.send(err));
 });
 
+
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log(`\n** Running on port ${port} **\n`));
+
+
