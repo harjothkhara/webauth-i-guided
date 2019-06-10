@@ -19,7 +19,7 @@ function protected(req, res, next) {
             // with what is in the db.
             if (user && bcrypt.compareSync(password, user.password)) {
                                           //guess+rehash //we have in the db
-            next();
+            next(); //goes to next middleware (route handler) on a successful login with the correct credentials 
             } else {
               res.status(401).json({ message: 'Invalid Credentials' });
               // if we don't find the user by the username or if the password don't match we're still returning invalid credentials.

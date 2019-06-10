@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const bcrypt = require('bcryptjs'); //<<<<<<<<<< we get the hash by using(importing) the bcryptjs library <<<<< yarn add bcryptjs
 
 const db = require('./database/dbConfig.js'); //db config options - connections
 const Users = require('./users/users-model.js'); //interacting with our db
@@ -20,11 +21,11 @@ server.post('/api/register', (req, res) => {
   let user = req.body; //user credentials
   // check for username and password
 
-  const hash = bcrypt.hashSync(user.password, 10); // 2^10 rounds <<<<<<<<<<<<<<<<<<<<<<<<<
+  const hash = bcrypt.hashSync(user.password, 10); // 2^10 rounds <<<<<<<<<<<<<<<<<<<<<<<<< will generate our hash
   // pass > hashit > hash > hashit > hash > hashit > hash
   //we get the hash by using the bcryptjs library, has a few methods 1) hash(async) 2) hashsync
   //hash the password. goal:over-riding the pw that we get with the new hash before we save the user
-  user.password = hash; //<<<<<<<<<<<<<<<<<<<<<<<<
+  user.password = hash; //<<<<<<<<<<<<<<<<<<<<<<<< overriding the password of the user with the hash
 
   Users.add(user)
     .then(saved => {
